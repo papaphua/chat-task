@@ -47,10 +47,31 @@ public sealed class ChatService(
             request.Name,
             userId,
             request.Description);
+        
+        var membership = Membership.Create(
+            userId,
+            chat.Id);
+        
+        var transaction = await unityOfWork.BeginTransactionAsync();
 
-        await db.AddAsync(chat);
-        await unityOfWork.SaveChangesAsync();
+        try
+        {
+            await db.AddAsync(chat);
+            await db.AddAsync(membership);
+            await unityOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            return Result<Entities.Chat>.Failure(ChatError.InternalError);
+        }
 
+        await transaction.CommitAsync();
+
+        // remove linked entities to avoid json cycles in response
+        chat.Memberships = default;
+        chat.Owner = default;
+        
         return Result<Entities.Chat>.Success(chat);
     }
 
@@ -84,12 +105,29 @@ public sealed class ChatService(
             .FirstOrDefaultAsync();
 
         if (chat is null) return Result.Failure(ChatError.NotFound);
-        
+
         if (chat.OwnerId != userId) return Result.Failure(ChatError.NoPermission);
+
+        var memberships = await db.Set<Membership>()
+            .Where(m => m.ChatId == chatId)
+            .ToListAsync();
+
+        var transaction = await unityOfWork.BeginTransactionAsync();
+
+        try
+        {
+            db.RemoveRange(memberships);
+            db.Remove(chat);
+            await unityOfWork.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            return Result.Failure(ChatError.InternalError);
+        }
         
-        db.Remove(chat);
-        await unityOfWork.SaveChangesAsync();
-        
+        await transaction.CommitAsync();
+
         return Result.Success();
     }
 }
