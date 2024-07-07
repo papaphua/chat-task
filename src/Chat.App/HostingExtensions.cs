@@ -11,6 +11,8 @@ public static class HostingExtensions
         builder.Services.AddControllers()
             .AddApplicationPart(Presentation.AssemblyReference.Assembly);
 
+        builder.Services.AddSwaggerGen();
+        
         builder.Services.AddEfCore(configuration);
 
         builder.Services.AddServices();

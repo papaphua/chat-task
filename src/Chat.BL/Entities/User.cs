@@ -12,8 +12,6 @@ public sealed class User
 
     public ICollection<Membership> Memberships { get; set; } = default!;
 
-    public bool IsDeleted { get; set; }
-
     public static User Create(string username, string? firstName = default, string? lastName = default)
     {
         return new User
