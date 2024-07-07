@@ -21,7 +21,7 @@ public sealed class UserController(IUserService userService)
     }
 
     [HttpPost]
-    public async Task<IResult> CreateUser(UserRequest.Create request)
+    public async Task<IResult> CreateUser(UserRequest.CreateUser request)
     {
         var result = await userService.CreateUserAsync(request);
 
@@ -31,7 +31,7 @@ public sealed class UserController(IUserService userService)
     }
 
     [HttpPut("{userId:guid}")]
-    public async Task<IResult> UpdateUser(Guid userId, UserRequest.Update request)
+    public async Task<IResult> UpdateUser(Guid userId, UserRequest.UpdateUser request)
     {
         var result = await userService.UpdateUserAsync(userId, request);
 

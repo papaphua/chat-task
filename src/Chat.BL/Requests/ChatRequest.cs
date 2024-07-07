@@ -2,7 +2,7 @@
 
 public static class ChatRequest
 {
-    public record Create(string Name, string? Description = default);
+    public sealed record CreateChat(string Name, string? Description = default);
 
-    public record Update(string Name, string? Description = default);
+    public sealed record UpdateChat(string Name, string? Description = default);
 }

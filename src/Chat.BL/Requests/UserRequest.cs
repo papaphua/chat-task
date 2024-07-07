@@ -2,7 +2,7 @@
 
 public static class UserRequest
 {
-    public record Create(string Username, string? FirstName = default, string? LastName = default);
+    public sealed record CreateUser(string Username, string? FirstName = default, string? LastName = default);
 
-    public record Update(string Username, string? FirstName = default, string? LastName = default);
+    public sealed record UpdateUser(string Username, string? FirstName = default, string? LastName = default);
 }

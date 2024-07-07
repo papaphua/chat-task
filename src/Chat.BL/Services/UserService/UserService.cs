@@ -22,7 +22,7 @@ public sealed class UserService(
             : Result<User>.Success(user);
     }
 
-    public async Task<Result<User>> CreateUserAsync(UserRequest.Create request)
+    public async Task<Result<User>> CreateUserAsync(UserRequest.CreateUser request)
     {
         var user = await db.Set<User>()
             .FirstOrDefaultAsync(u => u.Username == request.Username);
@@ -40,7 +40,7 @@ public sealed class UserService(
         return Result<User>.Success(user);
     }
 
-    public async Task<Result<User>> UpdateUserAsync(Guid userId, UserRequest.Update request)
+    public async Task<Result<User>> UpdateUserAsync(Guid userId, UserRequest.UpdateUser request)
     {
         var user = await db.Set<User>()
             .FirstOrDefaultAsync(u => u.Id == userId);

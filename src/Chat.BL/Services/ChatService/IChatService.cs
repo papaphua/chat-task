@@ -9,9 +9,9 @@ public interface IChatService
     
     Task<Result<List<Entities.Chat>>> GetAllUserChatsAsync(Guid userId);
     
-    Task<Result<Entities.Chat>> CreateChatAsync(Guid userId, ChatRequest.Create request);
+    Task<Result<Entities.Chat>> CreateChatAsync(Guid userId, ChatRequest.CreateChat request);
     
-    Task<Result<Entities.Chat>> UpdateChatAsync(Guid userId, Guid chatId, ChatRequest.Update request);
+    Task<Result<Entities.Chat>> UpdateChatAsync(Guid userId, Guid chatId, ChatRequest.UpdateChat request);
 
     Task<Result> RemoveChatAsync(Guid userId, Guid chatId);
 }

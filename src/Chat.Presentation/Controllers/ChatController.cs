@@ -31,7 +31,7 @@ public sealed class ChatController(IChatService chatService)
     }
 
     [HttpPost]
-    public async Task<IResult> CreateChat(Guid userId, ChatRequest.Create request)
+    public async Task<IResult> CreateChat(Guid userId, ChatRequest.CreateChat request)
     {
         var result = await chatService.CreateChatAsync(userId, request);
 
@@ -41,7 +41,7 @@ public sealed class ChatController(IChatService chatService)
     }
 
     [HttpPut("{userId:guid}/{chatId:guid}")]
-    public async Task<IResult> UpdateChat(Guid userId, Guid chatId, ChatRequest.Update request)
+    public async Task<IResult> UpdateChat(Guid userId, Guid chatId, ChatRequest.UpdateChat request)
     {
         var result = await chatService.UpdateChatAsync(userId, chatId, request);
 

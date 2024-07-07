@@ -34,7 +34,7 @@ public sealed class ChatService(
         return Result<List<Entities.Chat>>.Success(chats);
     }
 
-    public async Task<Result<Entities.Chat>> CreateChatAsync(Guid userId, ChatRequest.Create request)
+    public async Task<Result<Entities.Chat>> CreateChatAsync(Guid userId, ChatRequest.CreateChat request)
     {
         var user = await db.Set<User>()
             .FirstOrDefaultAsync(u => u.Id == userId);
@@ -54,7 +54,7 @@ public sealed class ChatService(
         return Result<Entities.Chat>.Success(chat);
     }
 
-    public async Task<Result<Entities.Chat>> UpdateChatAsync(Guid userId, Guid chatId, ChatRequest.Update request)
+    public async Task<Result<Entities.Chat>> UpdateChatAsync(Guid userId, Guid chatId, ChatRequest.UpdateChat request)
     {
         var chat = await db.Set<Membership>()
             .Where(m => m.UserId == userId && m.ChatId == chatId)
