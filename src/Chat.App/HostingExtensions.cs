@@ -1,5 +1,4 @@
 ﻿using Chat.App.Startup;
-using Chat.Presentation;
 
 namespace Chat.App;
 
@@ -10,9 +9,11 @@ public static class HostingExtensions
         var configuration = builder.Configuration;
 
         builder.Services.AddControllers()
-            .AddApplicationPart(AssemblyReference.Assembly);
+            .AddApplicationPart(Presentation.AssemblyReference.Assembly);
 
         builder.Services.AddEfCore(configuration);
+
+        builder.Services.AddServices();
 
         return builder.Build();
     }

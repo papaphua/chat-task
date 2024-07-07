@@ -16,6 +16,7 @@ public sealed class MessageConfiguration : IEntityTypeConfiguration<Message>
         builder.HasOne(message => message.Chat)
             .WithMany()
             .HasForeignKey(message => message.ChatId)
-            .OnDelete(DeleteBehavior.NoAction);;
+            .OnDelete(DeleteBehavior.NoAction);
+        ;
     }
 }
