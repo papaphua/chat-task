@@ -59,4 +59,35 @@ public sealed class ChatController(IChatService chatService)
             ? Results.Ok()
             : result.ToProblemDetails();
     }
+
+    [HttpGet]
+    [Route("{search}")]
+    public async Task<IResult> SearchChats(string search)
+    {
+        var result = await chatService.SearchChatsAsync(search);
+
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : result.ToProblemDetails();
+    }
+
+    [HttpPost("{userId:guid}/{chatId:guid}/join")]
+    public async Task<IResult> JoinChat(Guid userId, Guid chatId)
+    {
+        var result = await chatService.JoinChatAsync(userId, chatId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
+
+    [HttpDelete("{userId:guid}/{chatId:guid}/leave")]
+    public async Task<IResult> LeaveChat(Guid userId, Guid chatId)
+    {
+        var result = await chatService.LeaveChatAsync(userId, chatId);
+
+        return result.IsSuccess
+            ? Results.Ok()
+            : result.ToProblemDetails();
+    }
 }

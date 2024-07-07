@@ -14,4 +14,10 @@ public interface IChatService
     Task<Result<Entities.Chat>> UpdateChatAsync(Guid userId, Guid chatId, ChatRequest.UpdateChat request);
 
     Task<Result> RemoveChatAsync(Guid userId, Guid chatId);
+
+    Task<Result<List<Entities.Chat>>> SearchChatsAsync(string search);
+
+    Task<Result> JoinChatAsync(Guid userId, Guid chatId);
+    
+    Task<Result> LeaveChatAsync(Guid userId, Guid chatId);
 }

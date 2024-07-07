@@ -130,4 +130,55 @@ public sealed class ChatService(
 
         return Result.Success();
     }
+
+    public async Task<Result<List<Entities.Chat>>> SearchChatsAsync(string search)
+    {
+        var chats = await db.Set<Entities.Chat>()
+            .Where(c => EF.Functions.Like(c.Name, $"%{search}%"))
+            .ToListAsync();
+        
+        return Result<List<Entities.Chat>>.Success(chats);
+    }
+
+    public async Task<Result> JoinChatAsync(Guid userId, Guid chatId)
+    {
+        var chat = await db.Set<Entities.Chat>()
+            .FirstOrDefaultAsync(c => c.Id == chatId);
+        
+        if (chat is null) return Result.Failure(ChatError.NotFound);
+
+        var membership = await db.Set<Membership>()
+            .FirstOrDefaultAsync(c => c.UserId == userId && c.ChatId == chatId);
+        
+        if(membership is not null) return Result.Failure(ChatError.AlreadyMember);
+
+        membership = Membership.Create(
+            userId,
+            chat.Id);
+        
+        await db.AddAsync(membership);
+        await unityOfWork.SaveChangesAsync();
+        
+        return Result.Success();
+    }
+
+    public async Task<Result> LeaveChatAsync(Guid userId, Guid chatId)
+    {
+        var chat = await db.Set<Entities.Chat>()
+            .FirstOrDefaultAsync(c => c.Id == chatId);
+        
+        if (chat is null) return Result.Failure(ChatError.NotFound);
+
+        if (chat.OwnerId == userId) return Result.Failure(ChatError.OwnerLeaveError);
+        
+        var membership = await db.Set<Membership>()
+            .FirstOrDefaultAsync(c => c.UserId == userId && c.ChatId == chatId);
+        
+        if(membership is null) return Result.Failure(ChatError.NotMember);
+
+        db.Remove(membership);
+        await unityOfWork.SaveChangesAsync();
+        
+        return Result.Success();
+    }
 }

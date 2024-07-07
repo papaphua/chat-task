@@ -23,4 +23,12 @@ public static class ChatError
     public static readonly Error InternalError = Error.Internal(
         $"{nameof(Entities.Chat)}.{nameof(InternalError)}",
         "An internal error occurred while processing the chat.");
+    
+    public static readonly Error AlreadyMember = Error.Conflict(
+        $"{nameof(Entities.Chat)}.{nameof(AlreadyMember)}",
+        "You are already a member of this chat.");
+    
+    public static readonly Error OwnerLeaveError = Error.Validation(
+        $"{nameof(Entities.Chat)}.{nameof(OwnerLeaveError)}",
+        "Chat owner can only remove chat to leave it.");
 }
