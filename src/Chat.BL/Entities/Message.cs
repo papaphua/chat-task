@@ -14,6 +14,8 @@ public sealed class Message
 
     public string Text { get; set; } = default!;
 
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+
     public static Message Create(Guid senderId, Guid chatId, string text)
     {
         return new Message
