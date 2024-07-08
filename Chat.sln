@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.DAL", "src\Chat.DAL\Ch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Presentation", "src\Chat.Presentation\Chat.Presentation.csproj", "{DE2C451D-CEA8-48BC-B501-6A38B41BB14B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{373FFA6A-ADEC-4BE8-AD45-84E71C0F7628}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.UnitTests", "tests\Chat.UnitTests\Chat.UnitTests.csproj", "{8257A770-1661-435E-8115-560CBBD820CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,7 @@ Global
 		{DE231C13-2577-415C-8D97-E53186143D4B} = {D42F0DF8-14D6-45B9-B968-C2638590C7B6}
 		{B9B0285A-C65F-440B-B3F5-4D79F4C81A70} = {D42F0DF8-14D6-45B9-B968-C2638590C7B6}
 		{DE2C451D-CEA8-48BC-B501-6A38B41BB14B} = {D42F0DF8-14D6-45B9-B968-C2638590C7B6}
+		{8257A770-1661-435E-8115-560CBBD820CF} = {373FFA6A-ADEC-4BE8-AD45-84E71C0F7628}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{85BC7799-6D32-4867-9622-BDDFC260D3DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -38,5 +43,9 @@ Global
 		{DE2C451D-CEA8-48BC-B501-6A38B41BB14B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE2C451D-CEA8-48BC-B501-6A38B41BB14B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE2C451D-CEA8-48BC-B501-6A38B41BB14B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8257A770-1661-435E-8115-560CBBD820CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8257A770-1661-435E-8115-560CBBD820CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8257A770-1661-435E-8115-560CBBD820CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8257A770-1661-435E-8115-560CBBD820CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
