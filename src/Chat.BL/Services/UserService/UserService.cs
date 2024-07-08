@@ -9,7 +9,7 @@ namespace Chat.BL.Services.UserService;
 
 public sealed class UserService(
     IDbContext db,
-    IUnityOfWork unityOfWork)
+    IUnitOfWork unitOfWork)
     : IUserService
 {
     public async Task<Result<User>> GetUserAsync(Guid userId)
@@ -35,7 +35,7 @@ public sealed class UserService(
             request.LastName);
 
         await db.AddAsync(user);
-        await unityOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         return Result<User>.Success(user);
     }
@@ -59,7 +59,7 @@ public sealed class UserService(
         user.LastName = request.LastName;
 
         db.Update(user);
-        await unityOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         return Result<User>.Success(user);
     }
@@ -72,7 +72,7 @@ public sealed class UserService(
         if (user is null) return Result<User>.Failure(UserError.NotFound);
 
         db.Remove(user);
-        await unityOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         return Result.Success();
     }

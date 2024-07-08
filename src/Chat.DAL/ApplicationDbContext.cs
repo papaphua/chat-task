@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Chat.DAL;
 
 public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : DbContext(options), IDbContext, IUnityOfWork
+    : DbContext(options), IDbContext, IUnitOfWork
 {
     public async Task AddAsync<TEntity>(TEntity entity)
         where TEntity : class

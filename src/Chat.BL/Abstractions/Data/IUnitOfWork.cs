@@ -2,7 +2,7 @@
 
 namespace Chat.BL.Abstractions.Data;
 
-public interface IUnityOfWork
+public interface IUnitOfWork
 {
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

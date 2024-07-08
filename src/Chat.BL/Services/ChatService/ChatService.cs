@@ -9,7 +9,7 @@ namespace Chat.BL.Services.ChatService;
 
 public sealed class ChatService(
     IDbContext db,
-    IUnityOfWork unityOfWork)
+    IUnitOfWork unitOfWork)
     : IChatService
 {
     public async Task<Result<Entities.Chat>> GetChatAsync(Guid userId, Guid chatId)
@@ -52,13 +52,13 @@ public sealed class ChatService(
             userId,
             chat.Id);
 
-        var transaction = await unityOfWork.BeginTransactionAsync();
+        var transaction = await unitOfWork.BeginTransactionAsync();
 
         try
         {
             await db.AddAsync(chat);
             await db.AddAsync(membership);
-            await unityOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
         catch (Exception)
         {
@@ -92,7 +92,7 @@ public sealed class ChatService(
         chat.Description = request.Description;
 
         db.Update(chat);
-        await unityOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         return Result<Entities.Chat>.Success(chat);
     }
@@ -116,14 +116,14 @@ public sealed class ChatService(
             .Where(m => m.ChatId == chatId)
             .ToListAsync();
 
-        var transaction = await unityOfWork.BeginTransactionAsync();
+        var transaction = await unitOfWork.BeginTransactionAsync();
 
         try
         {
             db.RemoveRange(messages);
             db.RemoveRange(memberships);
             db.Remove(chat);
-            await unityOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
         catch (Exception)
         {
@@ -162,7 +162,7 @@ public sealed class ChatService(
             chat.Id);
 
         await db.AddAsync(membership);
-        await unityOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         return Result.Success();
     }
@@ -182,7 +182,7 @@ public sealed class ChatService(
         if (membership is null) return Result.Failure(ChatError.NotMember);
 
         db.Remove(membership);
-        await unityOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         return Result.Success();
     }

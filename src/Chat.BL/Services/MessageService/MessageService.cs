@@ -9,7 +9,7 @@ namespace Chat.BL.Services.MessageService;
 
 public sealed class MessageService(
     IDbContext db,
-    IUnityOfWork unityOfWork)
+    IUnitOfWork unitOfWork)
     : IMessageService
 {
     public async Task<Result<Message>> GetMessageAsync(Guid userId, Guid messageId)
@@ -51,7 +51,7 @@ public sealed class MessageService(
             request.Text);
 
         await db.AddAsync(message);
-        await unityOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         return Result<Message>.Success(message);
     }
@@ -64,7 +64,7 @@ public sealed class MessageService(
         if (message is null) return Result.Failure(MessageError.NotFound);
 
         db.Remove(message);
-        await unityOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         return Result.Success();
     }

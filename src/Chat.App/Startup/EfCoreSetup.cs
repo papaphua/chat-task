@@ -16,7 +16,7 @@ public static class EfCoreSetup
         services.AddScoped<IDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
 
-        services.AddScoped<IUnityOfWork>(provider =>
+        services.AddScoped<IUnitOfWork>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
 
         return services;
