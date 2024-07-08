@@ -1,14 +1,19 @@
 ﻿using Chat.BL.Requests;
 using Chat.BL.Services.ChatService;
 using Chat.Presentation.Extensions;
+using Chat.Presentation.Hubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.Presentation.Controllers;
 
 [ApiController]
 [Route("api/chat")]
-public sealed class ChatController(IChatService chatService)
+public sealed class ChatController(
+    IChatService chatService,
+    IChatHub chatHub,
+    IHubContext<ChatHub> chatHubContext)
 {
     [HttpGet("{userId:guid}/{chatId:guid}")]
     public async Task<IResult> GetChat(Guid userId, Guid chatId)
@@ -55,9 +60,11 @@ public sealed class ChatController(IChatService chatService)
     {
         var result = await chatService.RemoveChatAsync(userId, chatId);
 
-        return result.IsSuccess
-            ? Results.Ok()
-            : result.ToProblemDetails();
+        if (!result.IsSuccess) return result.ToProblemDetails();
+
+        await chatHub.DisbandGroupAsync(chatId.ToString());
+
+        return Results.Ok();
     }
 
     [HttpGet]

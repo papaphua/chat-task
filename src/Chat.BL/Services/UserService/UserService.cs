@@ -51,16 +51,16 @@ public sealed class UserService(
 
         var userByUsername = await db.Set<User>()
             .FirstOrDefaultAsync(u => u.Username == request.Username && u.Id != userId);
-        
+
         if (userByUsername is not null) return Result<User>.Failure(UserError.AlreadyExists);
-        
+
         user.Username = request.Username;
         user.FirstName = request.FirstName;
         user.LastName = request.LastName;
 
         db.Update(user);
         await unityOfWork.SaveChangesAsync();
-        
+
         return Result<User>.Success(user);
     }
 
@@ -70,10 +70,10 @@ public sealed class UserService(
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user is null) return Result<User>.Failure(UserError.NotFound);
-        
+
         db.Remove(user);
         await unityOfWork.SaveChangesAsync();
-        
+
         return Result.Success();
     }
 }

@@ -1,14 +1,18 @@
 ﻿using Chat.BL.Requests;
 using Chat.BL.Services.MessageService;
 using Chat.Presentation.Extensions;
+using Chat.Presentation.Hubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.Presentation.Controllers;
 
 [ApiController]
 [Route("api/message")]
-public sealed class MessageController(IMessageService messageService)
+public sealed class MessageController(
+    IMessageService messageService,
+    IHubContext<ChatHub> chatHubContext)
 {
     [HttpGet("{userId:guid}/{messageId:guid}")]
     public async Task<IResult> GetMessage(Guid userId, Guid messageId)
@@ -35,9 +39,11 @@ public sealed class MessageController(IMessageService messageService)
     {
         var result = await messageService.CreateMessageAsync(userId, chatId, request);
 
-        return result.IsSuccess
-            ? Results.Ok(result.Value)
-            : result.ToProblemDetails();
+        if (!result.IsSuccess) return result.ToProblemDetails();
+
+        await chatHubContext.Clients.Group(chatId.ToString()).SendAsync(ChatHub.ReceiveMessage, result.Value);
+
+        return Results.Ok(result.Value);
     }
 
     [HttpDelete("{userId:guid}/{messageId:guid}")]

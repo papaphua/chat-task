@@ -28,16 +28,17 @@ public sealed class MessageService(
             .FirstOrDefaultAsync(m => m.UserId == userId && m.ChatId == chatId);
 
         if (membership is null) return Result<List<Message>>.Failure(ChatError.NotFound);
-        
+
         var messages = await db.Set<Message>()
             .Where(m => m.ChatId == chatId)
             .OrderByDescending(m => m.Timestamp)
             .ToListAsync();
-        
+
         return Result<List<Message>>.Success(messages);
     }
 
-    public async Task<Result<Message>> CreateMessageAsync(Guid userId, Guid chatId, MessageRequest.CreateMessage request)
+    public async Task<Result<Message>> CreateMessageAsync(Guid userId, Guid chatId,
+        MessageRequest.CreateMessage request)
     {
         var membership = await db.Set<Membership>()
             .FirstOrDefaultAsync(m => m.UserId == userId && m.ChatId == chatId);

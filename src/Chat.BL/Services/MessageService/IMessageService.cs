@@ -9,7 +9,7 @@ public interface IMessageService
     Task<Result<Message>> GetMessageAsync(Guid userId, Guid messageId);
 
     Task<Result<List<Message>>> GetAllMessagesAsync(Guid userId, Guid chatId);
-    
+
     Task<Result<Message>> CreateMessageAsync(Guid userId, Guid chatId, MessageRequest.CreateMessage request);
 
     Task<Result> RemoveMessageAsync(Guid userId, Guid messageId);
