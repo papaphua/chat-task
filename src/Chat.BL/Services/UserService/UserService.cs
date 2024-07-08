@@ -45,14 +45,12 @@ public sealed class UserService(
         var user = await db.Set<User>()
             .FirstOrDefaultAsync(u => u.Id == userId);
 
-        if (user is null) return Result<User>.Failure(UserError.NotFound);
-
-        if (string.IsNullOrWhiteSpace(request.Username)) return Result<User>.Failure(UserError.UsernameRequired);
-
         var userByUsername = await db.Set<User>()
             .FirstOrDefaultAsync(u => u.Username == request.Username && u.Id != userId);
 
-        if (userByUsername is not null) return Result<User>.Failure(UserError.AlreadyExists);
+        var canUpdateResult = CanUpdateUser(user, userByUsername, request);
+
+        if (!canUpdateResult.IsSuccess) return Result<User>.Failure(canUpdateResult.Error!);
 
         user.Username = request.Username;
         user.FirstName = request.FirstName;
@@ -73,6 +71,17 @@ public sealed class UserService(
 
         db.Remove(user);
         await unitOfWork.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
+    public Result CanUpdateUser(User? currentUser, User? userFromDb, UserRequest.UpdateUser request)
+    {
+        if (currentUser is null) return Result.Failure(UserError.NotFound);
+
+        if (string.IsNullOrWhiteSpace(request.Username)) return Result.Failure(UserError.UsernameRequired);
+
+        if (userFromDb is not null) return Result.Failure(UserError.AlreadyExists);
 
         return Result.Success();
     }
